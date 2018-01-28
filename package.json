@@ -1,0 +1,32 @@
+{
+  "name": "qa-site-react",
+  "version": "0.1.0",
+  "description": "Frontend for a Q&A site, in React",
+  "license": "MIT",
+  "author": "Michał Perłakowski <michal.perlakowski@gmail.com> (https://github.com/Gothdo)",
+  "repository": "Gothdo/qa-site-react",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.0",
+    "html-webpack-plugin": "^2.30.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.dev.babel.js --watch"
+  }
+}
