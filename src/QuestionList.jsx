@@ -2,6 +2,7 @@ import React from 'react';
 import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
+import Tooltip from 'material-ui/Tooltip';
 import indigo from 'material-ui/colors/indigo';
 import grey from 'material-ui/colors/grey';
 import axios from 'axios';
@@ -44,21 +45,27 @@ export default class QuestionList extends React.Component {
                 <Grid container>
                   <Grid item xs={1} container direction="column" alignItems="flex-end" spacing={0} style={{ color: grey[700], textAlign: 'center' }}>
                     <Grid item>
-                      <Typography title="score" style={{ fontSize: '1.3rem' }}>
-                        {(score > 0 ? '+' : '') + approx(score)}
-                      </Typography>
+                      <Tooltip title="Score">
+                        <Typography aria-label="Score" style={{ fontSize: '1.3rem' }}>
+                          {(score > 0 ? '+' : '') + approx(score)}
+                        </Typography>
+                      </Tooltip>
                     </Grid>
                     <Grid item>
-                      <Typography title="answers">
-                        {answers}
-                        <QuestionAnswer style={iconStyles} />
-                      </Typography>
+                      <Tooltip title="Answers">
+                        <Typography aria-label="Answers">
+                          {answers}
+                          <QuestionAnswer style={iconStyles} />
+                        </Typography>
+                      </Tooltip>
                     </Grid>
                     <Grid item>
-                      <Typography title="views">
-                        {approx(views)}
-                        <RemoveRedEye style={iconStyles} />
-                      </Typography>
+                      <Tooltip title="Views">
+                        <Typography aria-label="Views">
+                          {approx(views)}
+                          <RemoveRedEye style={iconStyles} />
+                        </Typography>
+                      </Tooltip>
                     </Grid>
                   </Grid>
                   <Grid item xs={11}>
@@ -68,13 +75,17 @@ export default class QuestionList extends React.Component {
                     </Typography>
                     <Typography component="p" align="right" style={{ fontSize: '0.8rem', color: grey[700] }}>
                       {'asked '}
-                      <time dateTime={date.toISOString()} title={date.format('YYYY-MM-DD HH:mm:ss')} style={{ color: grey[800] }}>
-                        {date.fromNow()}
-                      </time>
+                      <Tooltip title={date.format('YYYY-MM-DD HH:mm:ss')}>
+                        <time dateTime={date.toISOString()} style={{ color: grey[800] }}>
+                          {date.fromNow()}
+                        </time>
+                      </Tooltip>
                       {' by '}
                       <span style={{ color: indigo[400], fontWeight: 450 }}>{displayName}</span>
                       {' '}
-                      <span title="reputation" style={{ fontWeight: 500 }}>{approx(reputation)}</span>
+                      <Tooltip title="Reputation">
+                        <span aria-label="Reputation" style={{ fontWeight: 500 }}>{approx(reputation)}</span>
+                      </Tooltip>
                     </Typography>
                   </Grid>
                 </Grid>
