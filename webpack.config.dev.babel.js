@@ -23,4 +23,11 @@ export default {
       inject: 'body',
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  devServer: {
+    port: 8080,
+    historyApiFallback: true,
+  },
 };

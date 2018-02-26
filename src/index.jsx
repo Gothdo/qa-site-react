@@ -1,4 +1,5 @@
 import React from 'react';
 import { render } from 'react-dom';
+import QuestionList from './QuestionList';
 
-render(<h1>Hello World!</h1>, document.getElementById('app'));
+render(<QuestionList />, document.getElementById('app'));
