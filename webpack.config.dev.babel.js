@@ -30,4 +30,5 @@ export default {
     port: 8080,
     historyApiFallback: true,
   },
+  devtool: 'eval-source-map',
 };
