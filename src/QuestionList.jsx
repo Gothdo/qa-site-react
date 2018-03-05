@@ -49,9 +49,18 @@ const styles = () => ({
 });
 
 class QuestionList extends React.Component {
+  static propTypes = {
+    classes: PropTypes.shape().isRequired,
+    unansweredOnly: PropTypes.bool,
+  }
+  static defaultProps = {
+    unansweredOnly: false,
+  }
   state = { questions: [] }
   componentWillMount = async () => {
-    const { data: questions } = await axios.get('http://localhost:3000/questions/recent');
+    const { unansweredOnly } = this.props;
+    const url = `http://localhost:3000/questions/${unansweredOnly ? 'unanswered' : 'recent'}`;
+    const { data: questions } = await axios.get(url);
     this.setState({ questions });
   }
   formatScore = score => (score > 0 ? '+' : '') + approx(score)
@@ -123,8 +132,5 @@ class QuestionList extends React.Component {
     );
   }
 }
-QuestionList.propTypes = {
-  classes: PropTypes.shape().isRequired,
-};
 
 export default withStyles(styles)(QuestionList);

@@ -6,6 +6,7 @@ export default {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.bundle.js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -20,7 +21,6 @@ export default {
     new HTMLWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
-      inject: 'body',
     }),
   ],
   resolve: {
