@@ -10,6 +10,7 @@ import blue from 'material-ui/colors/blue';
 import grey from 'material-ui/colors/grey';
 import PropTypes from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
+import { always } from 'ramda';
 
 const styles = ({ drawerWidth, mixins: { toolbar }, spacing }) => ({
   toolbar,
@@ -39,6 +40,11 @@ const styles = ({ drawerWidth, mixins: { toolbar }, spacing }) => ({
   },
 });
 
+const navItems = [
+  { path: '/', text: 'Questions' },
+  { path: '/questions/unanswered', text: 'Unanswered' },
+];
+
 const Navigation = ({ classes }) =>
   (
     <div>
@@ -46,19 +52,29 @@ const Navigation = ({ classes }) =>
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem className={classes.li}>
-            <Typography component={NavLink} activeClassName={classes.activeLink} exact to="/" className={classes.link} color="inherit">Questions</Typography>
-          </ListItem>
-          <ListItem className={classes.li}>
-            <Typography component={NavLink} activeClassName={classes.activeLink} exact to="/questions/unanswered" className={classes.link} color="inherit">Unanswered</Typography>
-          </ListItem>
+          {navItems.map(({ path, text }) => (
+            <ListItem key={path} className={classes.li}>
+              <Typography
+                component={NavLink}
+                activeClassName={classes.activeLink}
+                exact
+                to={path}
+                className={classes.link}
+                color="inherit"
+                onClick={event => event.target.blur()}
+              >
+                {text}
+              </Typography>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <Typography variant="title" color="inherit">
-            <Route exact path="/" render={() => 'Questions'} />
-            <Route exact path="/questions/unanswered" render={() => 'Unanswered'} />
+            {navItems.map(({ path, text }) => (
+              <Route key={path} exact path={path} render={always(text)} />
+            ))}
           </Typography>
         </Toolbar>
       </AppBar>

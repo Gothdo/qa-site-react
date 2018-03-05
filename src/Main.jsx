@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { Route } from 'react-router-dom';
+import { always } from 'ramda';
 import QuestionList from './QuestionList';
 
 const styles = theme => ({
@@ -13,8 +14,8 @@ const styles = theme => ({
 const Main = ({ classes }) => (
   <main className={classes.root}>
     <div className={classes.toolbar} />
-    <Route exact path="/" render={() => <QuestionList />} />
-    <Route exact path="/questions/unanswered" render={() => <QuestionList unansweredOnly />} />
+    <Route exact path="/" render={always(<QuestionList />)} />
+    <Route exact path="/questions/unanswered" render={always(<QuestionList unansweredOnly />)} />
   </main>
 );
 Main.propTypes = {
