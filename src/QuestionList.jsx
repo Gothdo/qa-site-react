@@ -3,15 +3,16 @@ import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Tooltip from 'material-ui/Tooltip';
-import indigo from 'material-ui/colors/indigo';
 import grey from 'material-ui/colors/grey';
 import { withStyles } from 'material-ui/styles';
 import axios from 'axios';
 import QuestionAnswer from 'material-ui-icons/QuestionAnswer';
 import RemoveRedEye from 'material-ui-icons/RemoveRedEye';
-import moment from 'moment';
 import approx from 'approximate-number';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
+import uuid from 'uuid-base64';
+import { RelativeDate, formatScore } from './helpers';
 
 const styles = () => ({
   root: {
@@ -24,7 +25,7 @@ const styles = () => ({
     },
   },
   leftColumn: {
-    color: grey[700],
+    color: grey[800],
     textAlign: 'center',
   },
   icon: {
@@ -34,18 +35,14 @@ const styles = () => ({
     verticalAlign: 'middle',
   },
   score: {
-    fontSize: '1.3rem',
+    fontSize: '1.3em',
   },
   asked: {
-    fontSize: '0.8rem',
-    color: grey[700],
+    fontSize: '0.8em',
+    color: grey[600],
+    marginTop: 4,
   },
-  date: { color: grey[800] },
-  userName: {
-    color: indigo[400],
-    fontWeight: 450,
-  },
-  reputation: { fontWeight: 500 },
+  reputation: { fontWeight: 'bold' },
 });
 
 class QuestionList extends React.Component {
@@ -63,7 +60,6 @@ class QuestionList extends React.Component {
     const { data: questions } = await axios.get(url);
     this.setState({ questions });
   }
-  formatScore = score => (score > 0 ? '+' : '') + approx(score)
   render() {
     const { classes } = this.props;
     return (
@@ -73,8 +69,7 @@ class QuestionList extends React.Component {
           upvotes, downvotes, createdOn, id, answers, views,
           title, excerpt, user: { displayName, reputation },
         }) => {
-          const score = this.formatScore(upvotes - downvotes);
-          const date = moment(createdOn);
+          const score = formatScore(upvotes - downvotes);
           const isExcerpt = excerpt.length === 100;
           return (
             <Card key={id}>
@@ -83,12 +78,12 @@ class QuestionList extends React.Component {
                   <Grid item xs={1} container direction="column" alignItems="flex-end" spacing={0} className={classes.leftColumn}>
                     <Grid item>
                       <Tooltip title="Score">
-                        <Typography aria-label="Score" className={classes.score}>{score}</Typography>
+                        <Typography className={classes.score} color="inherit">{score}</Typography>
                       </Tooltip>
                     </Grid>
                     <Grid item>
                       <Tooltip title="Answers">
-                        <Typography aria-label="Answers">
+                        <Typography color="inherit">
                           {answers}
                           <QuestionAnswer className={classes.icon} />
                         </Typography>
@@ -96,7 +91,7 @@ class QuestionList extends React.Component {
                     </Grid>
                     <Grid item>
                       <Tooltip title="Views">
-                        <Typography aria-label="Views">
+                        <Typography color="inherit">
                           {approx(views)}
                           <RemoveRedEye className={classes.icon} />
                         </Typography>
@@ -104,22 +99,20 @@ class QuestionList extends React.Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={11}>
-                    <Typography variant="headline" component="h2">{title}</Typography>
-                    <Typography component="p" className={isExcerpt ? classes.excerpt : null}>
+                    <Typography variant="headline" component="h2">
+                      <RouterLink to={`/question/${uuid.encode(id)}`} className={classes.questionLink}>{title}</RouterLink>
+                    </Typography>
+                    <Typography className={isExcerpt ? classes.excerpt : null}>
                       {excerpt.trim()}
                     </Typography>
                     <Typography component="div" align="right" className={classes.asked}>
                       {'asked '}
-                      <Tooltip title={date.format('YYYY-MM-DD HH:mm:ss')}>
-                        <time dateTime={date.toISOString()} className={classes.date}>
-                          {date.fromNow()}
-                        </time>
-                      </Tooltip>
+                      <RelativeDate raw={createdOn} />
                       {' by '}
                       <span className={classes.userName}>{displayName}</span>
                       {' '}
                       <Tooltip title="Reputation">
-                        <span aria-label="Reputation" className={classes.reputation}>{approx(reputation)}</span>
+                        <span className={classes.reputation}>{approx(reputation)}</span>
                       </Tooltip>
                     </Typography>
                   </Grid>

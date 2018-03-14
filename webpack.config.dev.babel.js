@@ -28,7 +28,9 @@ export default {
   },
   devServer: {
     port: 8080,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
   },
   devtool: 'eval-source-map',
 };

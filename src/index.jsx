@@ -14,7 +14,7 @@ render(
   <BrowserRouter>
     <MuiThemeProvider theme={theme}>
       <Reboot />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,300i,400,400i,700,700i" />
       <Navigation />
       <Main />
     </MuiThemeProvider>
