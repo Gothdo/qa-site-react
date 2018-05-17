@@ -12,6 +12,7 @@ import grey from '@material-ui/core/colors/grey';
 import PropTypes from 'prop-types';
 import { Route, NavLink, Link } from 'react-router-dom';
 import { always } from 'ramda';
+import DocumentTitle from 'react-document-title';
 
 const styles = ({ drawerWidth, mixins: { toolbar }, spacing }) => ({
   toolbar: {
@@ -96,7 +97,12 @@ const Navigation = ({ classes }) =>
         <Toolbar className={classes.toolbar}>
           <Typography variant="title" color="inherit">
             {routeTitles.map(({ path, title, exact }) => (
-              <Route key={path} exact={exact} path={path} render={always(title)} />
+              <Route
+                key={path}
+                exact={exact}
+                path={path}
+                render={always(<div><DocumentTitle title={title} />{title}</div>)}
+              />
             ))}
           </Typography>
           <div>

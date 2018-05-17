@@ -42,6 +42,7 @@
     "@material-ui/icons": "^1.0.0-beta.43",
     "html-react-parser": "^0.4.2",
     "markdown-it": "^8.4.1",
+    "react-document-title": "^2.0.3",
     "uuid-base64": "^1.0.0"
   }
 }
