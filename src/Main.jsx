@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Route } from 'react-router-dom';
 import { always } from 'ramda';
-import blue from 'material-ui/colors/blue';
-import blueGrey from 'material-ui/colors/blueGrey';
+import blue from '@material-ui/core/colors/blue';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 import QuestionList from './QuestionList';
 import Question from './Question';
+import SignUp from './SignUp';
+import SignIn from './SignIn';
+import Message, { messages as allMessages } from './Message';
 
 const styles = theme => ({
   '@global': {
@@ -26,6 +29,10 @@ const styles = theme => ({
       color: blueGrey[50],
       padding: '16px',
       margin: '0 -16px',
+      '@media (min-width: 600px)': {
+        padding: '16px 24px',
+        margin: '0 -24px',
+      },
     },
   },
   root: {
@@ -33,15 +40,35 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
 });
-const Main = ({ classes }) => (
-  <main className={classes.root}>
-    <div className={classes.toolbar} />
-    <Route exact path="/" render={always(<QuestionList />)} />
-    <Route exact path="/questions/unanswered" render={always(<QuestionList unansweredOnly />)} />
-    <Route path="/question/:id" render={({ match }) => <Question id={match.params.id} />} />
-  </main>
-);
-Main.propTypes = {
-  classes: PropTypes.shape().isRequired,
-};
+class Main extends React.Component {
+  static propTypes = {
+    classes: PropTypes.shape().isRequired,
+  }
+  state = {
+    message: null,
+  }
+  onMessage = text => this.setState(({ message: text }));
+  onClose = () => this.setState({ message: null });
+  render() {
+    const { classes } = this.props;
+    return (
+      <main className={classes.root}>
+        <div className={classes.toolbar} />
+        <Route exact path="/" render={always(<QuestionList />)} />
+        <Route exact path="/questions/unanswered" render={always(<QuestionList unansweredOnly />)} />
+        <Route path="/question/:id" render={({ match }) => <Question id={match.params.id} />} />
+        <Route exact path="/sign-up" render={({ history }) => <SignUp history={history} onMessage={this.onMessage} />} />
+        <Route exact path="/sign-in" render={({ history }) => <SignIn history={history} onMessage={this.onMessage} />} />
+        {Object.entries(allMessages).map(([key, text]) => (
+          <Message
+            open={this.state.message === text}
+            key={key}
+            text={text}
+            onClose={this.onClose}
+          />
+        ))}
+      </main>
+    );
+  }
+}
 export default withStyles(styles)(Main);

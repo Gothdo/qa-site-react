@@ -1,13 +1,14 @@
 import React from 'react';
-import Card, { CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
-import Tooltip from 'material-ui/Tooltip';
-import grey from 'material-ui/colors/grey';
-import { withStyles } from 'material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
+import grey from '@material-ui/core/colors/grey';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import QuestionAnswer from 'material-ui-icons/QuestionAnswer';
-import RemoveRedEye from 'material-ui-icons/RemoveRedEye';
+import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
+import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import approx from 'approximate-number';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
@@ -29,8 +30,8 @@ const styles = () => ({
     textAlign: 'center',
   },
   icon: {
-    height: '1em',
-    width: '1em',
+    width: '0.8em',
+    height: '0.8em',
     paddingLeft: '0.2em',
     verticalAlign: 'middle',
   },
@@ -43,6 +44,9 @@ const styles = () => ({
     marginTop: 4,
   },
   reputation: { fontWeight: 'bold' },
+  title: {
+    fontSize: '1.3em',
+  },
 });
 
 class QuestionList extends React.Component {
@@ -57,7 +61,7 @@ class QuestionList extends React.Component {
   componentWillMount = async () => {
     const { unansweredOnly } = this.props;
     const url = `http://localhost:3000/questions/${unansweredOnly ? 'unanswered' : 'recent'}`;
-    const { data: questions } = await axios.get(url);
+    const { data: { data: questions } } = await axios.get(url);
     this.setState({ questions });
   }
   render() {
@@ -74,7 +78,7 @@ class QuestionList extends React.Component {
           return (
             <Card key={id}>
               <CardContent>
-                <Grid container>
+                <Grid container spacing={16}>
                   <Grid item xs={1} container direction="column" alignItems="flex-end" spacing={0} className={classes.leftColumn}>
                     <Grid item>
                       <Tooltip title="Score">
@@ -99,7 +103,7 @@ class QuestionList extends React.Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={11}>
-                    <Typography variant="headline" component="h2">
+                    <Typography variant="headline" component="h2" className={classes.title}>
                       <RouterLink to={`/question/${uuid.encode(id)}`} className={classes.questionLink}>{title}</RouterLink>
                     </Typography>
                     <Typography className={isExcerpt ? classes.excerpt : null}>
