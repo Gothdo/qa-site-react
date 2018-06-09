@@ -12,12 +12,8 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid-base64';
 import VoteUp from '@material-ui/icons/KeyboardArrowUp';
 import VoteDown from '@material-ui/icons/KeyboardArrowDown';
-import MarkdownIt from 'markdown-it';
-import parseHTML from 'html-react-parser';
-import { RelativeDate, formatScore } from './helpers';
-
-const md = new MarkdownIt();
-const renderMarkdown = x => parseHTML(md.render(x));
+import { Link as RouterLink } from 'react-router-dom';
+import { RelativeDate, formatScore, renderMarkdown } from './helpers';
 
 const postMetadataStyles = () => ({
   root: {
@@ -58,7 +54,12 @@ const PostMetadataUnstyled = ({ answer, post, classes }) => {
           {answer ? 'answered ' : 'asked '}
           <RelativeDate raw={post.createdOn} />
           {' by '}
-          <span className={classes.userName}>{post.user.displayName}</span>
+          <RouterLink
+            className={classes.userName}
+            to={`/user/${uuid.encode(post.user.id)}/profile`}
+          >
+            {post.user.displayName}
+          </RouterLink>
           {' '}
           <Tooltip title="Reputation">
             <span className={classes.reputation}>{approx(post.user.reputation)}</span>

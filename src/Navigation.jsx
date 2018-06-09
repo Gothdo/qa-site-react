@@ -67,6 +67,7 @@ const routeTitles = [
   { path: '/question/', title: 'Questions' },
   { path: '/sign-in', exact: true, title: 'Sign in' },
   { path: '/sign-up', exact: true, title: 'Sign up' },
+  { path: '/user/', title: 'User profile' },
 ];
 
 const Navigation = ({ classes }) =>

@@ -71,7 +71,7 @@ class QuestionList extends React.Component {
         {this.state.questions
         .map(({
           upvotes, downvotes, createdOn, id, answers, views,
-          title, excerpt, user: { displayName, reputation },
+          title, excerpt, user: { id: userId, displayName, reputation },
         }) => {
           const score = formatScore(upvotes - downvotes);
           const isExcerpt = excerpt.length === 100;
@@ -113,7 +113,12 @@ class QuestionList extends React.Component {
                       {'asked '}
                       <RelativeDate raw={createdOn} />
                       {' by '}
-                      <span className={classes.userName}>{displayName}</span>
+                      <RouterLink
+                        to={`/user/${uuid.encode(userId)}/profile`}
+                        className={classes.userName}
+                      >
+                        {displayName}
+                      </RouterLink>
                       {' '}
                       <Tooltip title="Reputation">
                         <span className={classes.reputation}>{approx(reputation)}</span>

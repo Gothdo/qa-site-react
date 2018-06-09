@@ -9,6 +9,7 @@ import QuestionList from './QuestionList';
 import Question from './Question';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
+import Profile from './Profile';
 import Message, { messages as allMessages } from './Message';
 
 const styles = theme => ({
@@ -59,6 +60,7 @@ class Main extends React.Component {
         <Route path="/question/:id" render={({ match }) => <Question id={match.params.id} />} />
         <Route exact path="/sign-up" render={({ history }) => <SignUp history={history} onMessage={this.onMessage} />} />
         <Route exact path="/sign-in" render={({ history }) => <SignIn history={history} onMessage={this.onMessage} />} />
+        <Route path="/user/:id/profile" render={({ match }) => <Profile match={match} />} />
         {Object.entries(allMessages).map(([key, text]) => (
           <Message
             open={this.state.message === text}
