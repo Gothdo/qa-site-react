@@ -62,7 +62,7 @@ class SignIn extends React.Component {
       <Card className={classes.root}>
         <CardContent>
           <form spellCheck="false" onSubmit={this.handleSubmit}>
-            <Typography variant="headline" gutterBottom>Sign in</Typography>
+            <Typography variant="headline" gutterBottom>Sign up</Typography>
             {this.state.incorrect && (
               <Typography className={classes.error} gutterBottom>
                 The e-mail address or password is incorrect.
