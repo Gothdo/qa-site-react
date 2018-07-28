@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import grey from '@material-ui/core/colors/grey';
@@ -13,6 +14,9 @@ import PropTypes from 'prop-types';
 import { Route, NavLink, Link } from 'react-router-dom';
 import { always } from 'ramda';
 import DocumentTitle from 'react-document-title';
+import uuid from 'uuid-base64';
+import { withRouter } from 'react-router';
+import { JWTConsumer } from './JWT';
 
 const styles = ({ drawerWidth, mixins: { toolbar }, spacing }) => ({
   toolbar: {
@@ -50,6 +54,7 @@ const styles = ({ drawerWidth, mixins: { toolbar }, spacing }) => ({
     padding: spacing.unit,
     color: 'inherit',
     fontSize: '1em',
+    verticalAlign: 'middle',
     '&:focus': {
       color: grey[300],
     },
@@ -62,60 +67,98 @@ const leftNav = [
 ];
 
 const routeTitles = [
-  { path: '/', exact: true, title: 'Questions' },
-  { path: '/questions/unanswered', exact: true, title: 'Unanswered' },
-  { path: '/question/', title: 'Questions' },
-  { path: '/sign-in', exact: true, title: 'Sign in' },
-  { path: '/sign-up', exact: true, title: 'Sign up' },
-  { path: '/user/', title: 'User profile' },
+  { path: '/', title: 'Questions' },
+  { path: '/questions/unanswered', title: 'Unanswered' },
+  { path: '/question/:id', title: 'Questions' },
+  { path: '/sign-in', title: 'Sign in' },
+  { path: '/sign-up', title: 'Sign up' },
+  { path: '/user/:id/profile', title: 'User profile' },
 ];
 
-const Navigation = ({ classes }) =>
-  (
-    <div>
-      <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          {leftNav.map(({ path, text }) => (
-            <ListItem key={path} className={classes.li}>
-              <Typography
-                component={NavLink}
-                activeClassName={classes.activeLink}
-                exact
-                to={path}
-                className={classes.link}
-                color="inherit"
-                onClick={event => event.target.blur()}
-              >
-                {text}
-              </Typography>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <AppBar className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-          <Typography variant="title" color="inherit">
-            {routeTitles.map(({ path, title, exact }) => (
-              <Route
-                key={path}
-                exact={exact}
-                path={path}
-                render={always(<div><DocumentTitle title={title} />{title}</div>)}
-              />
+class Navigation extends React.Component {
+  signOut = setJWT => () => {
+    setJWT(null);
+    localStorage.removeItem('JWT');
+    const { history } = this.props;
+    history.push('/');
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div>
+        <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
+          <div className={classes.toolbar} />
+          <Divider />
+          <List>
+            {leftNav.map(({ path, text }) => (
+              <ListItem key={path} className={classes.li}>
+                <Typography
+                  component={NavLink}
+                  activeClassName={classes.activeLink}
+                  exact
+                  to={path}
+                  className={classes.link}
+                  color="inherit"
+                  onClick={event => event.target.blur()}
+                >
+                  {text}
+                </Typography>
+              </ListItem>
             ))}
-          </Typography>
-          <div>
-            <Typography component={Link} to="/sign-in" className={classes.navRight}>Sign in</Typography>
-            <Typography component={Link} to="/sign-up" className={classes.navRight}>Sign up</Typography>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+          </List>
+        </Drawer>
+        <AppBar className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+            <Typography variant="title" color="inherit">
+              {routeTitles.map(({ path, title }) => (
+                <Route
+                  key={path}
+                  exact
+                  path={path}
+                  render={always(
+                    <div>
+                      <DocumentTitle title={title} />
+                      {title}
+                    </div>,
+                  )}
+                />
+              ))}
+            </Typography>
+            <JWTConsumer>
+              {({ JWT, setJWT }) => (JWT ? (
+                <div>
+                  <Typography
+                    component={Link}
+                    to={`/user/${uuid.encode(JWT.sub)}/profile`}
+                    className={classes.navRight}
+                  >
+                    {JWT.displayName}
+                  </Typography>
+                  <Button color="inherit" onClick={this.signOut(setJWT)}>
+                    Sign out
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Typography component={Link} to="/sign-in" className={classes.navRight}>
+                    Sign in
+                  </Typography>
+                  <Typography component={Link} to="/sign-up" className={classes.navRight}>
+                    Sign up
+                  </Typography>
+                </div>
+              ))}
+            </JWTConsumer>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
+}
 Navigation.propTypes = {
   classes: PropTypes.shape().isRequired,
+  history: PropTypes.shape().isRequired,
 };
 
-export default withStyles(styles)(Navigation);
+export default withRouter(withStyles(styles)(Navigation));

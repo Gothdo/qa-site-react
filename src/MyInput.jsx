@@ -2,11 +2,11 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 
-export default context => Object.assign(({ name, inputProps = {}, ...props }) => (
+export default ({ state, handleChange }) => Object.assign(({ name, inputProps = {}, ...props }) => (
   <TextField
     name={name}
-    value={context.state.form[name]}
-    onChange={context.handleChange}
+    value={state.form[name]}
+    onChange={handleChange}
     inputProps={{ required: true, ...inputProps }}
     fullWidth
     margin="dense"

@@ -45,13 +45,18 @@ class Main extends React.Component {
   static propTypes = {
     classes: PropTypes.shape().isRequired,
   }
+
   state = {
     message: null,
   }
+
   onMessage = text => this.setState(({ message: text }));
+
   onClose = () => this.setState({ message: null });
+
   render() {
     const { classes } = this.props;
+    const { message } = this.state;
     return (
       <main className={classes.root}>
         <div className={classes.toolbar} />
@@ -63,7 +68,7 @@ class Main extends React.Component {
         <Route path="/user/:id/profile" render={({ match }) => <Profile match={match} />} />
         {Object.entries(allMessages).map(([key, text]) => (
           <Message
-            open={this.state.message === text}
+            open={message === text}
             key={key}
             text={text}
             onClose={this.onClose}

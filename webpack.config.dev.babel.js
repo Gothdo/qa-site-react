@@ -1,7 +1,8 @@
-import path from 'path';
-import HTMLWebpackPlugin from 'html-webpack-plugin';
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
 
-export default {
+module.exports = {
+  mode: 'development',
   entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist'),

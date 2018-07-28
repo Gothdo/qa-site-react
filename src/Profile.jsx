@@ -39,12 +39,16 @@ class Profile extends React.Component {
     match: PropTypes.shape().isRequired,
     classes: PropTypes.shape().isRequired,
   }
+
   state = {}
+
   async componentWillMount() {
-    const url = `http://localhost:3000/user/${uuid.decode(this.props.match.params.id)}/profile`;
+    const { match } = this.props;
+    const url = `http://localhost:3000/user/${uuid.decode(match.params.id)}/profile`;
     const { data: user } = await axios.get(url);
     this.setState({ user });
   }
+
   render() {
     const { classes } = this.props;
     const { user } = this.state;
@@ -52,19 +56,27 @@ class Profile extends React.Component {
     return (
       <Card className={classes.root}>
         <CardContent>
-          {user.imageUrl && <img
-            src={`http://localhost:3000/${user.imageUrl}`}
-            alt="User avatar"
-            width="100"
-            height="100"
-            className={classes.profilePicture}
-          />}
-          <Typography variant="headline" gutterBottom>{user.displayName}</Typography>
+          {user.imageUrl && (
+            <img
+              src={`http://localhost:3000/${user.imageUrl}`}
+              alt="User avatar"
+              width="100"
+              height="100"
+              className={classes.profilePicture}
+            />
+          )}
+          <Typography variant="headline" gutterBottom>
+            {user.displayName}
+          </Typography>
           <div className={classes.meta}>
             <Typography gutterBottom color="inherit">
-              joined <RelativeDate raw={user.accountCreatedDate} />
+              {'joined '}
+              <RelativeDate raw={user.accountCreatedDate} />
             </Typography>
-            <Typography gutterBottom color="inherit">{approx(user.profileViews)} profile views</Typography>
+            <Typography gutterBottom color="inherit">
+              {approx(user.profileViews)}
+              {' profile views'}
+            </Typography>
             {user.githubUsername && (
               <Typography>
                 <GitHubIcon className={classes.icon} />
@@ -85,7 +97,9 @@ class Profile extends React.Component {
               </Typography>
             )}
           </div>
-          <Typography component="div">{user.about && renderMarkdown(user.about)}</Typography>
+          <Typography component="div">
+            {user.about && renderMarkdown(user.about)}
+          </Typography>
         </CardContent>
       </Card>
     );

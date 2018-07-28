@@ -43,7 +43,9 @@ const PostMetadataUnstyled = ({ answer, post, classes }) => {
           <VoteUp className={classes.voteButton} />
         </Tooltip>
         <Tooltip title="Score">
-          <Typography className={classes.score} color="inherit">{score}</Typography>
+          <Typography className={classes.score} color="inherit">
+            {score}
+          </Typography>
         </Tooltip>
         <Tooltip title="Vote down" className={classes.voteTooltip}>
           <VoteDown className={classes.voteButton} />
@@ -62,7 +64,9 @@ const PostMetadataUnstyled = ({ answer, post, classes }) => {
           </RouterLink>
           {' '}
           <Tooltip title="Reputation">
-            <span className={classes.reputation}>{approx(post.user.reputation)}</span>
+            <span className={classes.reputation}>
+              {approx(post.user.reputation)}
+            </span>
           </Tooltip>
         </Typography>
       </Grid>
@@ -94,12 +98,16 @@ class Question extends React.Component {
     classes: PropTypes.shape().isRequired,
     id: PropTypes.string.isRequired,
   }
+
   state = {}
+
   componentWillMount = async () => {
-    const url = `http://localhost:3000/question/${uuid.decode(this.props.id)}`;
+    const { id } = this.props;
+    const url = `http://localhost:3000/question/${uuid.decode(id)}`;
     const { data: question } = await axios.get(url);
     this.setState({ question });
   }
+
   render() {
     const { classes } = this.props;
     const { question } = this.state;
@@ -111,14 +119,18 @@ class Question extends React.Component {
             <Typography variant="headline" component="h1">
               {question.title}
             </Typography>
-            <Typography component="div" gutterBottom>{renderMarkdown(question.content)}</Typography>
+            <Typography component="div" gutterBottom>
+              {renderMarkdown(question.content)}
+            </Typography>
             <PostMetadata post={question} />
           </CardContent>
         </Card>
         {question.answers.map(answer => (
           <Card key={answer.id} className={classes.card}>
             <CardContent>
-              <Typography component="div">{renderMarkdown(answer.content)}</Typography>
+              <Typography component="div">
+                {renderMarkdown(answer.content)}
+              </Typography>
               <PostMetadata answer post={answer} />
             </CardContent>
           </Card>

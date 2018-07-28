@@ -54,22 +54,26 @@ class QuestionList extends React.Component {
     classes: PropTypes.shape().isRequired,
     unansweredOnly: PropTypes.bool,
   }
+
   static defaultProps = {
     unansweredOnly: false,
   }
+
   state = { questions: [] }
+
   componentWillMount = async () => {
     const { unansweredOnly } = this.props;
     const url = `http://localhost:3000/questions/${unansweredOnly ? 'unanswered' : 'recent'}`;
     const { data: { data: questions } } = await axios.get(url);
     this.setState({ questions });
   }
+
   render() {
     const { classes } = this.props;
+    const { questions } = this.state;
     return (
       <div className={classes.root}>
-        {this.state.questions
-        .map(({
+        {questions.map(({
           upvotes, downvotes, createdOn, id, answers, views,
           title, excerpt, user: { id: userId, displayName, reputation },
         }) => {
@@ -82,7 +86,9 @@ class QuestionList extends React.Component {
                   <Grid item xs={1} container direction="column" alignItems="flex-end" spacing={0} className={classes.leftColumn}>
                     <Grid item>
                       <Tooltip title="Score">
-                        <Typography className={classes.score} color="inherit">{score}</Typography>
+                        <Typography className={classes.score} color="inherit">
+                          {score}
+                        </Typography>
                       </Tooltip>
                     </Grid>
                     <Grid item>
@@ -104,7 +110,9 @@ class QuestionList extends React.Component {
                   </Grid>
                   <Grid item xs={11}>
                     <Typography variant="headline" component="h2" className={classes.title}>
-                      <RouterLink to={`/question/${uuid.encode(id)}`} className={classes.questionLink}>{title}</RouterLink>
+                      <RouterLink to={`/question/${uuid.encode(id)}`} className={classes.questionLink}>
+                        {title}
+                      </RouterLink>
                     </Typography>
                     <Typography className={isExcerpt ? classes.excerpt : null}>
                       {excerpt.trim()}
@@ -121,7 +129,9 @@ class QuestionList extends React.Component {
                       </RouterLink>
                       {' '}
                       <Tooltip title="Reputation">
-                        <span className={classes.reputation}>{approx(reputation)}</span>
+                        <span className={classes.reputation}>
+                          {approx(reputation)}
+                        </span>
                       </Tooltip>
                     </Typography>
                   </Grid>
